@@ -76,8 +76,45 @@ namespace TetrisEngine.BlockPiece
                 for (int j = 0; j < BlockPositions[i].Length; j++)
                 {
                     BlockPositions[i][j] = new int[BLOCK_AREA];
+                    for (int k = 0; k < BlockPositions[i][j].Length; k++)
+                    {
+                        // Check if value of a cell is valid by 1 and 0
+                        if (specs.serializedBlockPositions[position] != (int)Playfield.SpotState.EMPTY_SPOT &&
+                                specs.serializedBlockPositions[position] != (int)Playfield.SpotState.FILLED_SPOT)
+                        {
+                            throw new Exception(
+                            string.Format(
+                                "The layout of piece {0} is wrong in Json file. It contains '{1}' when only {2}s and {3}s are supported.",
+                                Name,
+                                specs.serializedBlockPositions[position],
+                                (int)Playfield.SpotState.EMPTY_SPOT,
+                                (int)Playfield.SpotState.FILLED_SPOT));
+                        }
+                        // If value is valid, store it
+                        BlockPositions[i][j][k] = specs.serializedBlockPositions[position++];
+                    }
                 }
             }
+        }
+        // Next rotation state in 4 states
+        public int NextRotation { get { return CurrentRotation + 1 > 3 ? 0 : CurrentRotation + 1; } }
+        public int PreviousRotation { get { return CurrentRotation - 1 < 0 ? 3 : CurrentRotation - 1; } }
+
+        // Get value 1 or 0 of a cell in a block
+        public int GetBlockType(int rotation, int x, int y)
+        {
+            return BlockPositions[rotation][x][y];
+        }
+
+        public Vector2Int GetInitialPosition(int rotation)
+        {
+            return initialPosition[rotation];
+        }
+
+        // Check if this is a cell
+        public bool ValidBlock(int rotation, int x, int y)
+        {
+            return BlockPositions[rotation][x][y] != 0;
         }
     }
 }

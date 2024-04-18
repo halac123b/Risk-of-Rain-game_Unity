@@ -26,5 +26,35 @@ namespace TetrisEngine
         private int[][] mPlayfield = new int[WIDTH][];
         private BlockSpawner mSpawner;
         private Block mCurrentBlock;
+        private GameSettings mGameSettings;
+
+        public Playfield(GameSettings gameSettings)
+        {
+            mGameSettings = gameSettings;
+            // Create array store grid information
+            for (int i = 0; i < WIDTH; i++)
+            {
+                mPlayfield[i] = new int[HEIGHT];
+            }
+            ResetGame();
+            mSpawner = new BlockSpawner(mGameSettings.ControledRandomMode, mGameSettings.pieces);
+        }
+
+        public void ResetGame()
+        {
+            mCurrentBlock = null;
+            // Reset all spots to empty
+            for (int i = 0; i < WIDTH; i++)
+            {
+                for (int j = 0; j < HEIGHT; j++)
+                {
+                    mPlayfield[i][j] = (int)SpotState.EMPTY_SPOT;
+                }
+            }
+            if (mGameSettings.DebugMode)
+            {
+                Debug.Log("RESETING GAME");
+            }
+        }
     }
 }
