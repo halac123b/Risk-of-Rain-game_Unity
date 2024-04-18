@@ -111,7 +111,7 @@ namespace TetrisEngine.BlockPiece
             return initialPosition[rotation];
         }
 
-        // Check if this is a cell
+        /// <summary>Check if this is a cell</summary>
         public bool ValidBlock(int rotation, int x, int y)
         {
             return BlockPositions[rotation][x][y] != 0;
